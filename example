@@ -1,0 +1,8 @@
+Hello, world!
+This is a test file
+to check your get_next_line implementation
+with multiple lines
+of varying lengths
+Some short
+Some longer lines that might stress your buffer handling
+Last line without a newline at the end
