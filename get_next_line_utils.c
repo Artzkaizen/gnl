@@ -6,7 +6,7 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 18:12:58 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/06 16:24:45 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/06 22:06:44 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ size_t	ft_strlcat(char *dest, char *src, size_t size)
 	length = ft_strlen(dest);
 	dest_length = ft_strlen(dest);
 	src_length = ft_strlen(src);
+	// int tmp = src[size - dest_length - 2] != '\n';
+	// size += tmp;
 	if (size <= dest_length)
 		return (size + src_length);
 	while (src[count] && count < size - dest_length - 1)
@@ -62,5 +64,34 @@ size_t	ft_strlcat(char *dest, char *src, size_t size)
 		count++;
 	}
 	dest[length + count] = '\0';
-	return (dest_length + src_length);
+	return (length + count);
+}
+
+
+void	*ft_bzero(void *s, size_t n)
+{
+	size_t	i;
+	char	*dest;
+
+	i = 0;
+	dest = s;
+	while (i < n)
+		dest[i++] = 0;
+	return (dest);
+}
+
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*ptr;
+
+	if (nmemb == 0 || size == 0)
+		return (malloc(0));
+	if (nmemb > (size_t)-1 / size)
+		return (NULL);
+	ptr = malloc(nmemb * size);
+	if (!ptr)
+		return (NULL);
+	ft_bzero(ptr, nmemb * size);
+	return (ptr);
 }
