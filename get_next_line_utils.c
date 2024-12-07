@@ -6,7 +6,7 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 18:12:58 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/06 22:06:44 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/07 09:01:09 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ size_t	ft_strlcat(char *dest, char *src, size_t size)
 	return (length + count);
 }
 
-
 void	*ft_bzero(void *s, size_t n)
 {
 	size_t	i;
@@ -79,7 +78,6 @@ void	*ft_bzero(void *s, size_t n)
 		dest[i++] = 0;
 	return (dest);
 }
-
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
