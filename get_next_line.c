@@ -6,14 +6,13 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 18:12:50 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/06 22:07:48 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/09 13:36:41 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-
-char	*ft_realloc(char *ptr, size_t new_size)
+static char	*ft_realloc(char *ptr, size_t new_size)
 {
 	size_t	i;
 	char	*new_ptr;
@@ -38,14 +37,12 @@ char	*ft_realloc(char *ptr, size_t new_size)
 	return (new_ptr);
 }
 
-char	*parse_line(char *s, t_file *file, int realloc, int buff_size)
+static char	*parse_line(char *s, t_file *file, int realloc, int buff_size)
 {
 	int		len;
 
 	len = 0;
-	if (buff_size == 1)
-		return (file->line);
-	if (!file->bytes_read)
+	if (!file->bytes_read || !*s)
 		return (file->line = NULL);
 	if ((file->bytes_parsed) == buff_size)
 		file->bytes_parsed = 0;
@@ -55,20 +52,19 @@ char	*parse_line(char *s, t_file *file, int realloc, int buff_size)
 	{
 		file->line_len = ft_strlen(file->line);
 		file->line = ft_realloc(file->line, (len + file->line_len + 2));
-		file->line_len = ft_strlcat(file->line, s, (len + file->line_len + 2));
+		len += file->line_len;
 	}
 	else
 	{
 		file->line = (char *)ft_calloc(sizeof(char), (len + 2));
-		*file->line = 0;
 		if (!file->line)
 			return (NULL);
-		file->line_len = ft_strlcat(file->line, s, len + 2);
 	}
+	file->line_len = ft_strlcat(file->line, s, (len + 2));
 	return (file->line);
 }
 
-int	is_empty(char *buffer, int size)
+static int	is_empty(char *buffer, int size)
 {
 	int	i;
 
@@ -80,13 +76,7 @@ int	is_empty(char *buffer, int size)
 
 char	*get_next_line(int fd)
 {
-	static t_file	file = {
-		.fd = -1,
-		.line_len = 0,
-		.bytes_read = 0,
-		.bytes_parsed = 0,
-		.line = NULL
-	};
+	static t_file	file = {-1, 0, 0, 0, NULL};
 	int				empty;
 	static char		buffer[BUFFER_SIZE + 1];
 
@@ -97,13 +87,15 @@ char	*get_next_line(int fd)
 	empty = is_empty(buffer, BUFFER_SIZE);
 	if (empty)
 		file.bytes_read = read(file.fd, buffer, BUFFER_SIZE);
+	if (file.bytes_read == file.bytes_parsed)
+		file.bytes_parsed = 0;
 	parse_line(&buffer[file.bytes_parsed], &file, 0, BUFFER_SIZE);
 	while ((file.bytes_read == BUFFER_SIZE) && file.line
 		&& file.line[file.line_len - 1] != '\n')
 	{
 		file.bytes_read = read(fd, buffer, BUFFER_SIZE);
-		parse_line(buffer, &file, 1, BUFFER_SIZE);
+		if (file.bytes_read > 0)
+			parse_line(buffer, &file, 1, BUFFER_SIZE);
 	}
 	return (file.line);
 }
-

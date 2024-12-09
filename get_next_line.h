@@ -6,7 +6,7 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 18:12:55 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/06 20:31:23 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/09 13:33:56 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
-
 
 typedef struct s_file
 {

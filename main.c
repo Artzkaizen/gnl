@@ -6,7 +6,7 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 17:28:28 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/07 09:37:30 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:59:28 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ int main(void)
 	int fd;
 	char *line;
 	int line_count;
-	char *filenames[] = {"line1.txt", "line2.txt", "line3.txt", "tmp", "no_nl"};
+	char *filenames[] = {"line1.txt", "line2.txt", "line3.txt", "line4.txt", "line5.txt" "tmp", "no_nl"};
 	int num_files = sizeof(filenames) / sizeof(filenames[0]);
+
+	printf("Number of files: %d\n", num_files);
 
 	for (int i = 0; i < num_files; i++)
 	{
