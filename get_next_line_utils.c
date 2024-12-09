@@ -6,7 +6,7 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 18:12:58 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/09 13:29:37 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/09 14:26:52 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ size_t	ft_strlcat(char *dest, char *src, size_t size)
 
 	count = 0;
 	length = ft_strlen(dest);
-	dest_length = ft_strlen(dest);
+	dest_length = length;
 	src_length = ft_strlen(src);
 	if (size <= dest_length)
 		return (size + src_length);
