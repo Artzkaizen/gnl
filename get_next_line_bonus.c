@@ -6,7 +6,7 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 13:39:34 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/09 20:01:01 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:06:35 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,22 +64,24 @@ static char	*parse_line(char *s, t_file *file, int realloc, int buff_size)
 	return (file->line);
 }
 
-int	ft_lstindex(t_list *lst, int fd)
+t_list	*ft_lstfind(t_list **lst, int fd)
 {
-	int	i;
+	int		i;
+	t_list	*tmp;
 
 	i = 0;
-	while (lst)
+	tmp = *lst;
+	while (tmp)
 	{
-		if (lst->file.fd == fd)
-			return (i);
-		lst = lst->next;
+		if (tmp->file.fd == fd)
+			return (tmp);
+		tmp = tmp->next;
 		i++;
 	}
-	return (-1);
+	return (NULL);
 }
 
-t_list	*ft_lstnew(void const *content)
+t_list	*ft_lstnew(void)
 {
 	t_list	*new_list;
 
@@ -117,6 +119,11 @@ t_list	*ft_lstadd(t_list **lst, int fd)
 	t_list	*new_list;
 	t_list	*tmp;
 
+	if (!lst)
+		return (NULL);
+	tmp = ft_lstfind(lst, fd);
+	if (tmp)
+		return (tmp);
 	new_list = (t_list *)malloc(sizeof(t_list));
 	if (!new_list)
 		return (NULL);
@@ -125,13 +132,7 @@ t_list	*ft_lstadd(t_list **lst, int fd)
 	new_list->file.bytes_read = 0;
 	new_list->file.bytes_parsed = 0;
 	new_list->file.line = NULL;
-	new_list->file.buffer = ft_ca;
 	new_list->next = NULL;
-	if (!lst || !new_list)
-	{
-		free(new_list);
-		return (NULL);
-	}
 	if (!*lst)
 		*lst = new_list;
 	else
@@ -156,27 +157,28 @@ static int	is_empty(char *buffer, int size)
 
 char	*get_next_line(int fd)
 {
-	static t_file	**files;
+	static t_list	*list;
 	int				empty;
-	static char		buffer[BUFFER_SIZE + 1];
 
-	files = (t_file **)ft_lstadd_back(files);
-	if (fd != -1)
-		file.fd = fd;
+	list = NULL;
+	if (fd != -1 || (list != NULL && fd != list->file.fd))
+		list = (t_list *)ft_lstadd(&list, fd);
 	else
 		return (NULL);
-	empty = is_empty(buffer, BUFFER_SIZE);
+	empty = is_empty(list->file.buffer, BUFFER_SIZE);
 	if (empty)
-		file.bytes_read = read(file.fd, buffer, BUFFER_SIZE);
-	if (file.bytes_read == file.bytes_parsed)
-		file.bytes_parsed = 0;
-	parse_line(&buffer[file.bytes_parsed], &file, 0, BUFFER_SIZE);
-	while ((file.bytes_read == BUFFER_SIZE) && file.line
-		&& file.line[file.line_len - 1] != '\n')
+		list->file.bytes_read = read(list->file.fd,
+				list->file.buffer, BUFFER_SIZE);
+	if (list->file.bytes_read == list->file.bytes_parsed)
+		list->file.bytes_parsed = 0;
+	parse_line(&list->file.buffer[list->file.bytes_parsed],
+		&list->file, 0, BUFFER_SIZE);
+	while ((list->file.bytes_read == BUFFER_SIZE) && list->file.line
+		&& list->file.line[list->file.line_len - 1] != '\n')
 	{
-		file.bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (file.bytes_read > 0)
-			parse_line(buffer, &file, 1, BUFFER_SIZE);
+		list->file.bytes_read = read(fd, list->file.buffer, BUFFER_SIZE);
+		if (list->file.bytes_read > 0)
+			parse_line(list->file.buffer, &list->file, 1, BUFFER_SIZE);
 	}
-	return (file.line);
+	return (list->file.line);
 }

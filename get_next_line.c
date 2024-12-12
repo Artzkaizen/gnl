@@ -6,7 +6,7 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 18:12:50 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/09 20:49:55 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/10 10:45:04 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static char	*parse_line(char *s, t_file *file, int realloc, int buff_size)
 		len++;
 	if (realloc)
 	{
-		file->line_len = ft_strlen(file->line);
 		file->line = ft_realloc(file->line, (len + file->line_len + 2));
 		len += file->line_len;
 	}
@@ -76,7 +75,6 @@ static int	is_empty(char *buffer, int size)
 
 char	*get_next_line(int fd)
 {
-	size_t			i;
 	static t_file	file = {-1, 0, 0, 0, NULL};
 	int				empty;
 	static char		buffer[BUFFER_SIZE + 1];
@@ -88,10 +86,6 @@ char	*get_next_line(int fd)
 	empty = is_empty(buffer, BUFFER_SIZE);
 	if (empty)
 		file.bytes_read = read(file.fd, buffer, BUFFER_SIZE);
-	i = 0;
-	if (file.bytes_read == -1)
-		while (i < BUFFER_SIZE)
-			buffer[i++] = '\0';
 	if (file.bytes_read == file.bytes_parsed || empty)
 		file.bytes_parsed = 0;
 	parse_line(&buffer[file.bytes_parsed], &file, 0, BUFFER_SIZE);
@@ -99,9 +93,6 @@ char	*get_next_line(int fd)
 		&& file.line[file.line_len - 1] != '\n')
 	{
 		file.bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (file.bytes_read == -1)
-			while (i < BUFFER_SIZE)
-				buffer[i++] = '\0';
 		if (file.bytes_read > 0)
 			parse_line(buffer, &file, 1, BUFFER_SIZE);
 	}

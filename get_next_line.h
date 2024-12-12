@@ -6,7 +6,7 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 18:12:55 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/09 13:33:56 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/12 18:00:06 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ typedef struct s_file
 void	*ft_calloc(size_t nmemb, size_t size);
 size_t	ft_strlcat(char *dest, char *src, size_t size);
 char	*get_next_line(int fd);
-void	close_file(t_file *file);
 size_t	ft_strlen(const char *str);
-t_file	*open_file(const char *filename);
 
 #endif

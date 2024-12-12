@@ -6,7 +6,7 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 13:40:00 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/09 14:32:53 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/12 18:00:45 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct s_file
 	int			bytes_read;
 	int			bytes_parsed;
 	char		*line;
-	char		*buffer;
+	char		buffer[BUFFER_SIZE + 1];
 }	t_file;
 
 typedef struct s_list
@@ -34,6 +34,8 @@ typedef struct s_list
 }	t_list;
 
 char	*get_next_line(int fd);
+size_t	ft_strlen(const char *str);
 void	*ft_calloc(size_t nmemb, size_t size);
+size_t	ft_strlcat(char *dest, char *src, size_t size);
 
 #endif

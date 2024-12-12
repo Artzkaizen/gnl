@@ -6,31 +6,11 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 18:12:58 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/09 14:26:52 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/12 18:00:16 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-t_file	*open_file(const char *filename)
-{
-	int		fd;
-	t_file	*file;
-
-	fd = open(filename, O_RDONLY);
-	file = (t_file *)malloc(sizeof(t_file));
-	if (!file)
-		return (file);
-	file->fd = fd;
-	file->bytes_read = 0;
-	return (file);
-}
-
-void	close_file(t_file *file)
-{
-	close(file->fd);
-	free(file);
-}
 
 size_t	ft_strlen(const char *str)
 {

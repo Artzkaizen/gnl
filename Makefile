@@ -5,7 +5,7 @@ DEBUG = -g
 SANITIZE = -fsanitize=address -fsanitize=undefined
 SRCS = main.c get_next_line.c get_next_line_utils.c
 BONUS_SRCS = main_bonus.c get_next_line_bonus.c get_next_line_utils_bonus.c
-BUFFER = -D BUFFER_SIZE=1
+BUFFER = -D BUFFER_SIZE=10
 
 # All target for regular files
 all: $(NAME)
