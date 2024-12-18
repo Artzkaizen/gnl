@@ -6,11 +6,11 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 17:28:28 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/09 20:26:49 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:15:42 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <stdio.h>
 
 int main(void)
@@ -19,7 +19,7 @@ int main(void)
 	char *line;
 	int line_count;
 	// char *filenames[] = {"line1.txt", "line2.txt", "line3.txt", "line4.txt", "line5.txt" "tmp", "no_nl"};
-	char *filenames[] = {"multiple_line_with_nl.txt"};
+	char *filenames[] = {"tmp"};
 	int num_files = sizeof(filenames) / sizeof(filenames[0]);
 
 	printf("Number of files: %d\n", num_files);

@@ -6,12 +6,16 @@
 /*   By: chuezeri <chuezeri@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 13:40:00 by chuezeri          #+#    #+#             */
-/*   Updated: 2024/12/12 18:00:45 by chuezeri         ###   ########.fr       */
+/*   Updated: 2024/12/18 17:16:42 by chuezeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_BONUS_H
 # define GET_NEXT_LINE_BONUS_H
+
+# ifndef BUFFER_SIZE
+#define BUFFER_SIZE 24
+# endif
 
 # include <unistd.h>
 # include <stdlib.h>
