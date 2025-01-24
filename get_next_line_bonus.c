@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -14,88 +15,96 @@
 
 #define MAX_FD 1024
 
-static char	*ft_realloc(char *ptr, size_t new_size)
+static char *ft_realloc(char *ptr, size_t new_size)
 {
-	size_t	i;
-	char	*new_ptr;
+    size_t i;
+    char *new_ptr;
 
-	if (!ptr)
-		return ((char *)ft_calloc(new_size, (new_size / new_size)));
-	if (!new_size)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	new_ptr = (char *)ft_calloc(new_size, (new_size / new_size));
-	if (!new_ptr)
-		return (NULL);
-	i = 0;
-	while (ptr[i] && i < new_size)
-	{
-		new_ptr[i] = ptr[i];
-		i++;
-	}
-	free(ptr);
-	return (new_ptr);
+    if (!ptr)
+        return ((char *)ft_calloc(new_size, 1));
+    if (new_size == 0)
+    {
+        free(ptr);
+        return (NULL);
+    }
+    new_ptr = (char *)ft_calloc(new_size, 1);
+    if (!new_ptr)
+        return (NULL);
+    i = 0;
+    while (ptr[i] && i < new_size)
+    {
+        new_ptr[i] = ptr[i];
+        i++;
+    }
+    free(ptr);
+    return (new_ptr);
 }
 
-static char	*parse_line(char *s, t_file *file, int realloc, int buff_size)
-{
-	int		len;
 
-	len = 0;
-	if (!file->bytes_read || !*s)
-		return (file->line = NULL);
-	if ((file->bytes_parsed) == buff_size)
-		file->bytes_parsed = 0;
-	while (++file->bytes_parsed < buff_size && s[len] && s[len] != '\n')
-		len++;
-	if (realloc)
-	{
-		file->line_len = ft_strlen(file->line);
-		file->line = ft_realloc(file->line, (len + file->line_len + 2));
-		len += file->line_len;
-	}
-	else
-	{
-		file->line = (char *)ft_calloc(sizeof(char), (len + 2));
-		if (!file->line)
-			return (NULL);
-	}
-	file->line_len = ft_strlcat(file->line, s, (len + 2));
-	return (file->line);
+static char *parse_line(char *buffer, t_file *file, int realloc, int buff_size)
+{
+    int len;
+    
+    len = 0;
+    if (!file->bytes_read || !*buffer)
+        return (file->line = NULL); 
+    if (file->bytes_parsed == buff_size)
+        file->bytes_parsed = 0;
+
+    while (++file->bytes_parsed < buff_size && buffer[len] && buffer[len] != '\n')
+        len++;
+    if (realloc)
+    {
+        file->line_len = ft_strlen(file->line);
+        file->line = ft_realloc(file->line, (len + file->line_len + 2)); 
+        if (!file->line)
+            return (NULL);
+        len += file->line_len;
+    }
+    else
+    {
+        file->line = (char *)ft_calloc(sizeof(char), (len + 2));
+        if (!file->line)
+            return (NULL);
+    }
+    file->line_len = ft_strlcat(file->line, buffer, (len + 2));
+
+    return (file->line);
 }
 
-static int	is_empty(char *buffer, int size)
+static int is_empty(char *buffer, int size)
 {
-	int	i;
+    int i;
 
-	i = 0;
-	while (i < size && !buffer[i])
-		i++;
-	return (!buffer[i]);
+    i = 0;
+    while (i < size && !buffer[i])
+        i++;
+    return (!buffer[i]);
 }
 
-char	*get_next_line(int fd)
+char *get_next_line(int fd)
 {
-	int				empty;
-	static t_file	files[MAX_FD];
+    static t_file file_state[MAX_FD];
+    int empty;
 
-	// if (fd >= MAX_FD)
-	// 	return (NULL);
-	empty = is_empty(files[fd].buffer, BUFFER_SIZE);
-	if (empty)
-		files[fd].bytes_read = read(fd, files[fd].buffer, BUFFER_SIZE);
-	if (files[fd].bytes_read == files[fd].bytes_parsed)
-		files[fd].bytes_parsed = 0;
-	parse_line(&files[fd].buffer[files[fd].bytes_read],
-		&files[fd], 0, BUFFER_SIZE);
-	while ((files[fd].bytes_read == BUFFER_SIZE) && files[fd].line
-		&& files[fd].line[files[fd].line_len - 1] != '\n')
-	{
-		files[fd].bytes_read = read(fd, files[fd].buffer, BUFFER_SIZE);
-		if (files[fd].bytes_read > 0)
-			parse_line(files[fd].buffer, &files[fd], 1, BUFFER_SIZE);
-	}
-	return (files[fd].line);
+    if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0)
+        return (NULL);
+    empty = is_empty(file_state[fd].buffer, BUFFER_SIZE);
+    if (empty)
+    {
+        file_state[fd].bytes_read = read(fd, file_state[fd].buffer, BUFFER_SIZE);
+        if (file_state[fd].bytes_read == 0)
+            return (NULL);
+    }
+    if (file_state[fd].bytes_read == file_state[fd].bytes_parsed)
+        file_state[fd].bytes_parsed = 0;
+    parse_line(&file_state[fd].buffer[file_state[fd].bytes_parsed], &file_state[fd], 0, BUFFER_SIZE);
+    while (file_state[fd].bytes_read == BUFFER_SIZE && file_state[fd].line
+           && file_state[fd].line[file_state[fd].line_len - 1] != '\n')
+    {
+        file_state[fd].bytes_read = read(fd, file_state[fd].buffer, BUFFER_SIZE);
+        if (file_state[fd].bytes_read > 0)
+            parse_line(file_state[fd].buffer, &file_state[fd], 1, BUFFER_SIZE);
+    }
+    return (file_state[fd].line);
 }

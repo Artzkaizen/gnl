@@ -17,14 +17,11 @@ static char	*ft_realloc(char *ptr, size_t new_size)
 	size_t	i;
 	char	*new_ptr;
 
-	if (!ptr)
-		return ((char *)ft_calloc(new_size, (new_size / new_size)));
 	if (!new_size)
-	{
-		free(ptr);
 		return (NULL);
-	}
-	new_ptr = (char *)ft_calloc(new_size, (new_size / new_size));
+	if (!ptr)
+		return ((char *)ft_calloc(new_size, sizeof(char)));
+	new_ptr = (char *)ft_calloc(new_size, sizeof(char));
 	if (!new_ptr)
 		return (NULL);
 	i = 0;

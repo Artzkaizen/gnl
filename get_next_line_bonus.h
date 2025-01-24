@@ -10,36 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #ifndef GET_NEXT_LINE_BONUS_H
 # define GET_NEXT_LINE_BONUS_H
 
-# ifndef BUFFER_SIZE
-#define BUFFER_SIZE 24
-# endif
-
 # include <unistd.h>
-# include <stdlib.h>
 # include <fcntl.h>
+# include <stdlib.h>
 
-typedef struct s_file
-{
-	int			fd;
-	size_t		line_len;
-	int			bytes_read;
-	int			bytes_parsed;
-	char		*line;
-	char		buffer[BUFFER_SIZE + 1];
-}	t_file;
+#ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+#endif // BUFFER SIZE
 
-typedef struct s_list
-{
-	t_file			file;
-	struct s_list	*next;
-}	t_list;
+# define FD_MAX 1024
 
-char	*get_next_line(int fd);
-size_t	ft_strlen(const char *str);
+typedef struct s_file {
+    int fd;
+    char *line;
+    int line_len;
+    int bytes_read;
+    int bytes_parsed;
+    char buffer[BUFFER_SIZE + 1];  // Buffer for reading
+} t_file;
+
+
 void	*ft_calloc(size_t nmemb, size_t size);
 size_t	ft_strlcat(char *dest, char *src, size_t size);
+char	*get_next_line(int fd);
+size_t	ft_strlen(const char *str);
 
 #endif

@@ -17,6 +17,10 @@
 # include <fcntl.h>
 # include <stdlib.h>
 
+#ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+#endif // BUFFER SIZE
+
 typedef struct s_file
 {
 	int			fd;
